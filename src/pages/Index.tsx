@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Icon from "@/components/ui/icon";
 
-interface BettingEvent {
+interface CyberEvent {
   id: string;
   title: string;
   description: string;
@@ -28,57 +28,72 @@ interface BettingEvent {
   yesProbability: number;
   noProbability: number;
   isActive: boolean;
+  riskLevel: "low" | "medium" | "high";
 }
 
 const Index = () => {
-  const [balance, setBalance] = useState(1000);
+  const [balance, setBalance] = useState(2500);
   const [activeTab, setActiveTab] = useState("events");
-  const [selectedEvent, setSelectedEvent] = useState<BettingEvent | null>(null);
+  const [selectedEvent, setSelectedEvent] = useState<CyberEvent | null>(null);
   const [betAmount, setBetAmount] = useState("");
   const [betType, setBetType] = useState<"yes" | "no">("yes");
 
-  const mockEvents: BettingEvent[] = [
+  const cyberEvents: CyberEvent[] = [
     {
       id: "1",
-      title: "Биткоин достигнет $100,000 к концу 2024",
-      description:
-        "Цена BTC превысит отметку в $100,000 до 31 декабря 2024 года",
-      category: "Криптовалюты",
+      title: "BITCOIN MATRIX BREAKOUT",
+      description: "BTC достигнет $150,000 и пробьет матрицу сопротивления",
+      category: "CRYPTO",
       endDate: "2024-12-31",
-      totalPool: 45000,
-      yesPool: 27000,
-      noPool: 18000,
+      totalPool: 89750,
+      yesPool: 53850,
+      noPool: 35900,
       yesProbability: 60,
       noProbability: 40,
       isActive: true,
+      riskLevel: "high",
     },
     {
       id: "2",
-      title: "Илон Маск покинет пост CEO Tesla",
-      description:
-        "Илон Маск официально покинет должность CEO Tesla в течение 2024 года",
-      category: "Бизнес",
+      title: "AI SINGULARITY EVENT",
+      description: "OpenAI анонсирует первый AGI до конца 2024",
+      category: "TECH",
       endDate: "2024-12-31",
-      totalPool: 32000,
-      yesPool: 12800,
-      noPool: 19200,
+      totalPool: 124000,
+      yesPool: 49600,
+      noPool: 74400,
       yesProbability: 40,
       noProbability: 60,
       isActive: true,
+      riskLevel: "high",
     },
     {
       id: "3",
-      title: "Россия выиграет Чемпионат мира по футболу 2026",
-      description:
-        "Сборная России станет чемпионом мира по футболу в 2026 году",
-      category: "Спорт",
-      endDate: "2026-07-19",
-      totalPool: 28000,
-      yesPool: 8400,
-      noPool: 19600,
-      yesProbability: 30,
-      noProbability: 70,
+      title: "CYBER SPORTS DOMINATION",
+      description: "Россия завоюет золото в киберспорте на Олимпиаде",
+      category: "ESPORTS",
+      endDate: "2024-08-15",
+      totalPool: 67200,
+      yesPool: 40320,
+      noPool: 26880,
+      yesProbability: 60,
+      noProbability: 40,
       isActive: true,
+      riskLevel: "medium",
+    },
+    {
+      id: "4",
+      title: "NEURAL INTERFACE LAUNCH",
+      description: "Neuralink начнет массовые имплантации в 2024",
+      category: "BIOTECH",
+      endDate: "2024-12-31",
+      totalPool: 156000,
+      yesPool: 31200,
+      noPool: 124800,
+      yesProbability: 20,
+      noProbability: 80,
+      isActive: true,
+      riskLevel: "high",
     },
   ];
 
@@ -93,36 +108,61 @@ const Index = () => {
     setSelectedEvent(null);
   };
 
+  const getRiskColor = (risk: string) => {
+    switch (risk) {
+      case "low":
+        return "text-green-400";
+      case "medium":
+        return "text-yellow-400";
+      case "high":
+        return "text-red-400";
+      default:
+        return "text-gray-400";
+    }
+  };
+
+  const getRiskGlow = (risk: string) => {
+    switch (risk) {
+      case "low":
+        return "shadow-[0_0_10px_rgba(0,255,0,0.5)]";
+      case "medium":
+        return "shadow-[0_0_10px_rgba(255,255,0,0.5)]";
+      case "high":
+        return "shadow-[0_0_10px_rgba(255,0,0,0.5)]";
+      default:
+        return "";
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b border-border bg-card">
+    <div className="min-h-screen bg-background cyber-grid">
+      {/* Cyber Header */}
+      <header className="border-b border-border bg-card/80 backdrop-blur-sm neon-border">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <h1 className="text-2xl font-bold text-primary">🎯 BetMarket</h1>
-              <nav className="hidden md:flex space-x-6">
-                <Button variant="ghost" onClick={() => setActiveTab("events")}>
-                  События
-                </Button>
-                <Button variant="ghost" onClick={() => setActiveTab("profile")}>
-                  Профиль
-                </Button>
-                <Button variant="ghost" onClick={() => setActiveTab("deposit")}>
-                  Пополнить
-                </Button>
-              </nav>
+              <h1 className="text-3xl font-bold text-primary glitch-text">
+                ⚡ CYBER MATRIX
+              </h1>
+              <div className="hidden md:flex items-center space-x-2">
+                <div className="w-2 h-2 bg-accent rounded-full pulse-glow"></div>
+                <span className="text-sm text-accent font-mono">ONLINE</span>
+              </div>
             </div>
             <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2">
-                <Icon name="Wallet" size={20} className="text-primary" />
-                <span className="text-primary font-bold">
-                  ${balance.toLocaleString()}
-                </span>
+              <div className="cyber-card px-4 py-2 scan-line">
+                <div className="flex items-center space-x-2">
+                  <Icon name="Zap" size={16} className="text-primary" />
+                  <span className="text-primary font-bold font-mono">
+                    {balance.toLocaleString()} CR
+                  </span>
+                </div>
               </div>
-              <Avatar>
+              <Avatar className="neon-border">
                 <AvatarImage src="/placeholder.svg" />
-                <AvatarFallback>ЮР</AvatarFallback>
+                <AvatarFallback className="bg-primary/20 text-primary">
+                  CY
+                </AvatarFallback>
               </Avatar>
             </div>
           </div>
@@ -131,10 +171,25 @@ const Index = () => {
 
       <div className="container mx-auto px-4 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-3 mb-8">
-            <TabsTrigger value="events">Активные события</TabsTrigger>
-            <TabsTrigger value="profile">Профиль</TabsTrigger>
-            <TabsTrigger value="deposit">Пополнить баланс</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-3 mb-8 bg-card/50 backdrop-blur-sm neon-border">
+            <TabsTrigger
+              value="events"
+              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground font-mono"
+            >
+              NEURAL EVENTS
+            </TabsTrigger>
+            <TabsTrigger
+              value="profile"
+              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground font-mono"
+            >
+              CYBER PROFILE
+            </TabsTrigger>
+            <TabsTrigger
+              value="deposit"
+              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground font-mono"
+            >
+              CREDIT MATRIX
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="events">
